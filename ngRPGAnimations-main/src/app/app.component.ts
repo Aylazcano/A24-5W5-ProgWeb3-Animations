@@ -1,13 +1,22 @@
 import { Component } from '@angular/core';
 import {transition, trigger, useAnimation} from "@angular/animations";
+import { shakeX } from 'ng-animate';
+
+// Même durée que l'animation de FadeIn
+const DEATH_DURATION_SECONDS = 0.5;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  animations: [
+    trigger('death', [transition(':increment', useAnimation(shakeX, {params: {timing: DEATH_DURATION_SECONDS}}))]),
+]
 })
 export class AppComponent {
   slimeIsPresent = false;
+
+  ng_death = 0;
 
   constructor() {
   }
@@ -16,6 +25,12 @@ export class AppComponent {
     var element = document.getElementById("slimeyId");
     element?.classList.remove("fadeOut");
     element?.classList.add("fadeIn");
+  }
+
+  hideSlime(){
+    var element = document.getElementById("slimeyId");
+    element?.classList.remove("fadeIn");
+    element?.classList.add("fadeOut");
   }
 
   spawn() {
@@ -27,8 +42,11 @@ export class AppComponent {
   death(){
     this.slimeIsPresent = false;
     // TODO Animation angular avec forwards
+    this.hideSlime();
 
     // TODO 2e animation angular en même temps
+    this.ng_death++;
+    
   }
 
   attack(){
