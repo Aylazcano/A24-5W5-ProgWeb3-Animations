@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {transition, trigger, useAnimation} from "@angular/animations";
-import { pulse, shakeX, wobble } from 'ng-animate';
+import { transition, trigger, useAnimation } from "@angular/animations";
+import { pulse, shakeX, jello} from 'ng-animate';
 
-// Même durée que l'animation de FadeIn
+// Durées des animations Angular
 const DEATH_DURATION_SECONDS = 0.5;
 const ATTACK_DURATION_SECONDS = 0.3;
 const PREATTACK_DURATION_SECONDS = 0.2;
@@ -11,59 +11,66 @@ const PREATTACK_DURATION_SECONDS = 0.2;
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  // Animations Angular
   animations: [
-    trigger('death', [transition(':increment', useAnimation(shakeX, {params: {timing: DEATH_DURATION_SECONDS}}))]),
-    trigger('attack', [transition(':increment', useAnimation(pulse, {params: {timing: ATTACK_DURATION_SECONDS, scale: 4.5}}))]),
-    trigger('preAttack', [transition(':increment', useAnimation(wobble, {params: {timing: PREATTACK_DURATION_SECONDS}}))])
+    // Animation "Death" : tremblement
+    trigger('death', [
+      transition(':increment', useAnimation(shakeX, { params: { timing: DEATH_DURATION_SECONDS } })),
+    ]),
+    // Animation "Attack" : pulsation avec agrandissement
+    trigger('attack', [
+      transition(':increment', useAnimation(pulse, { params: { timing: ATTACK_DURATION_SECONDS, scale: 4.5 } })),
+    ]),
+    // Animation "PreAttack" : mouvement oscillant
+    trigger('preAttack', [
+      transition(':increment', useAnimation(jello, { params: { timing: PREATTACK_DURATION_SECONDS } })),
+    ]),
   ],
 })
 export class AppComponent {
-  slimeIsPresent = false;
+  // Variables d'état
+  slimeIsPresent = false; // Slime visible ?
+  ng_death = 0; // Animation Angular "Death"
+  ng_preAttack = 0; // Animation Angular "PreAttack"
+  ng_attack = 0; // Animation Angular "Attack"
+  css_hit = false; // Animation CSS "Hit"
 
-  ng_death = 0;
-  ng_preAttack = 0;
-  ng_attack = 0;
-
-  constructor() {
-  }
-
-  showSlime(){
-    var element = document.getElementById("slimeyId");
+  // Méthode pour montrer Slime
+  showSlime() {
+    const element = document.getElementById("slimeyId");
     element?.classList.remove("fadeOut");
     element?.classList.add("fadeIn");
   }
 
-  hideSlime(){
-    var element = document.getElementById("slimeyId");
+  // Méthode pour cacher Slime
+  hideSlime() {
+    const element = document.getElementById("slimeyId");
     element?.classList.remove("fadeIn");
     element?.classList.add("fadeOut");
   }
 
+  // Bouton "Spawn" : montre Slime
   spawn() {
     this.slimeIsPresent = true;
-    // TODO Animation angular avec forwards
     this.showSlime();
   }
 
-  death(){
+  // Déclenche l'animation Angular "Death"
+  death() {
     this.slimeIsPresent = false;
-    // TODO Animation angular avec forwards
     this.hideSlime();
-
-    // TODO 2e animation angular en même temps
     this.ng_death++;
-    
   }
 
-  attack(){
-    // TODO Jouer une animation et augmenter l'intensité du mouvement avec scale
+  // Déclenche l'animation Angular "Attack"
+  attack() {
     this.ng_preAttack++;
-    setTimeout(() => this.ng_attack++, 200);
-    // TODO Jouer une autre animation avant
+    setTimeout(() => this.ng_attack++, 200); // Déclenche après la préparation
   }
 
-  hit(){
-    // TODO Utilisé Animista pour faire une animation différente avec css (wobble)
+  // Déclenche l'animation CSS "Hit"
+  hit() {
+    this.css_hit = true;
+    setTimeout(() => { this.css_hit = false; }, 500); // Réinitialise après 5 secondes
   }
-
 }
