@@ -6,11 +6,11 @@
   <!-- Animation CSS appliquée ([class.wobble-hor-top]="css_hit")-->
   <div style="width: fit-content; position: absolute; top: 250px; left: 350px;" [class.wobble-hor-top]="css_hit">
     <!-- Slime avec plusieurs animations Angular -->
-    <!-- Animation Angular "Death" ([@death]="ng_death") et "Attack" ([@preAttack]="ng_preAttack" [@attack]="ng_attack")-->
+    <!-- Animation Angular "Death" ([@death]="ng_death"), "Attack" ([@preAttack]="ng_preAttack" [@attack]="ng_attack"), ...-->
     <img id="slimeyId" class="slime" width="150" src="../assets/slimeyWithBorder.png" [@death]="ng_death"
-      [@preAttack]="ng_preAttack" [@attack]="ng_attack" />
+      [@preAttack]="ng_preAttack" [@attack]="ng_attack" [@bounce]="ng_bounce" [@shake]="ng_shake" [@flip]="ng_flip" />
   </div>
-</div> 
+</div>
 
 <!-- Boutons pour contrôler les animations -->
 <div style="padding: 20px">
@@ -22,4 +22,5 @@
   <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="attack()">Attack</button>
   <!-- Bouton pour animer "Hit"-->
   <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="hit()">Hit</button>
+  <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="bounceShakeFlip()">Bounce/Shake/Flip</button>
 </div>
